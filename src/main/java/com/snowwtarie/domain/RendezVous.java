@@ -2,6 +2,7 @@ package com.snowwtarie.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,17 +43,24 @@ public class RendezVous {
     @Temporal(TemporalType.DATE)
     @Getter @Setter private Date dateRendezVous;
 	
-    @Column(name = "note_avant")
-	@Getter @Setter private String noteAvant;
+    @Column(name = "note_avant", columnDefinition = "TEXT")
+	@Getter @Setter private String notesAvant;
 	
-    @Column(name = "note_apres")
-	@Getter @Setter private String noteApres;
+    @Column(name = "note_apres", columnDefinition = "TEXT")
+	@Getter @Setter private String notesApres;
 	
     @Column(name = "paiement_status", columnDefinition = "boolean default false")
 	@Getter @Setter private Boolean hasPaid;
+    
+    @Column(name = "status", columnDefinition = "boolean default false")
+    @Getter @Setter private Boolean status;
 	
 	@Enumerated(EnumType.ORDINAL)
 	@Getter @Setter private com.snowwtarie.service.ConstantesUtil.Creneau creneau;
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	@Getter @Setter Paiement paiement;
 	
 	public RendezVous() {
 		/**
@@ -62,14 +72,16 @@ public class RendezVous {
 		this.patient = pPatient;
 		this.nomRendezVous = pNomRendezVous;
 		this.dateRendezVous = pDateRendezVous;
-		this.noteAvant = pNoteAvant;
-		this.noteApres = "";
+		this.notesAvant = pNoteAvant;
+		this.notesApres = "";
 		this.hasPaid = false;
+		this.status = false;
 	}
 	
-	public RendezVous(Patient pPatient, String pNomRendezVous, Date pDateRendezVous, String pNoteAvant, String pNoteApres, Boolean pHasPaid) {
+	public RendezVous(Patient pPatient, String pNomRendezVous, Date pDateRendezVous, String pNoteAvant, String pNoteApres, Boolean pHasPaid, Boolean pStatus) {
 		new RendezVous(pPatient, pNomRendezVous, pDateRendezVous, pNoteAvant);
-		this.noteApres = pNoteApres;
+		this.notesApres = pNoteApres;
 		this.hasPaid = pHasPaid;
+		this.status = pStatus;
 	}
 }

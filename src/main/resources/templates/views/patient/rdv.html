@@ -1,0 +1,76 @@
+{{>layout/layout}}
+	<div class="col-lg-12 col-md-12">
+		<div class="card">
+		    <div class="header">
+		        <h4 class="title">Rendez-vous</h4>
+            	<p class="category">Paiement : {{#rendezVous.hasPaid}}<i class="fa fa-check"></i>{{/rendezVous.hasPaid}}{{^rendezVous.hasPaid}}<i class="fa fa-times"></i>{{/rendezVous.hasPaid}}</p>
+            	<p class="category">Statut : {{#rendezVous.status}}<i class="fa fa-check"></i>{{/rendezVous.status}}{{^rendezVous.status}}<i class="fa fa-times"></i>{{/rendezVous.status}}</p>            	
+		    </div>
+		    <div class="content">
+		        <form method="post">		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Nom</label>
+		                        <input type="text" class="form-control border-input" placeholder="Nom" name="nom" id="nom" value="{{patient.nom}}" readonly>
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Prénom</label>
+		                        <input type="text" class="form-control border-input" placeholder="Prénom" name="prenom" id="prenom" value="{{patient.prenom}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Date du rendez-vous</label>
+		                        <input type="date" class="form-control border-input" placeholder="Date de naissance" name="dateRdv" id="dateRdv" value="{{rendezVous.dateRendezVous}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Notes avant rendez-vous</label>
+		                        <textarea rows="5" class="form-control border-input" name="notesAvant" id="notesAvant" {{#rendezVous.status}}disabled{{/rendezVous.status}}>
+		                        	{{#rendezVous.notesAvant}}{{rendezVous.notesAvant}}{{/rendezVous.notesAvant}}
+		                        </textarea>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Notes après rendez-vous</label>
+		                        <textarea rows="5" class="form-control border-input" name="notesApres" id="notesApres" {{^rendezVous.status}}disabled{{/rendezVous.status}}>
+		                        	{{#rendezVous.notesApres}}{{rendezVous.notesApres}}{{/rendezVous.notesApres}}
+		                        </textarea>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="text-center">
+		                <button type="submit" class="btn btn-info btn-fill btn-wd">Enregistrer notes</button>
+		                {{#rendezVous.status}}	                
+		                	<button type="button" class="btn btn-primary btn-fill btn-wd">Editer facture</button>
+	                	{{/rendezVous.status}}
+		                {{^rendezVous.status}}	                
+		                	<button type="button" class="btn btn-success btn-fill btn-wd">Cloturer rendez-vous</button>	                
+		                	<button type="submit" class="btn btn-danger btn-fill btn-wd">Annuler rendez-vous</button>
+	                	{{/rendezVous.status}}
+		            </div>
+		            <div class="clearfix"></div>
+		        </form>
+		    </div>
+		</div>
+	</div>	
+	{{#notesOk}}
+	<input type="hidden" name="notesOk" value="{{notesOk}}" id="notesOk" />
+	{{/notesOk}}
+{{>layout/footer}}

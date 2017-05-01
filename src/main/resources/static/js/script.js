@@ -21,4 +21,15 @@ $(document).ready(function() {
             timer: 4000
         });
     }
+
+    if ($('#notesOk').length > 0) {
+        $.notify({
+            icon: 'ti-info-alt',
+            message: "Enregistrement des <strong>notes</strong> réussi"
+
+        },{
+            type: 'success',
+            timer: 4000
+        });
+    }
 });

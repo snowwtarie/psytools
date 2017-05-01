@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.snowwtarie.domain.PaiementService;
 import com.snowwtarie.domain.Patient;
 import com.snowwtarie.domain.Praticien;
+import com.snowwtarie.domain.RendezVous;
 import com.snowwtarie.service.AuthService;
 import com.snowwtarie.service.ConstantesUtil;
 import com.snowwtarie.service.PatientService;
@@ -29,6 +31,9 @@ public class FrontController {
 	
 	@Resource
 	private RendezVousService rendezVousService;
+	
+	@Resource
+	private PaiementService paiementService;
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, ModelMap map) {
@@ -169,10 +174,54 @@ public class FrontController {
     public String viewPatient(HttpServletRequest request, ModelMap map, @PathVariable String id) {
     	Patient patient = patientService.findById(id);
     	
+    	map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
     	map.put("patient", patient);
-		map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
-    	map.put("rendezVous", rendezVousService.getAllRendezVous(patient));
+    	map.put("rendezVousPasse", rendezVousService.getAllRendezVousPasse(patient));
+    	map.put("rendezVousFutur", rendezVousService.getAllRendezVousFutur(patient));
     	
     	return "views/patient/view";
+    }
+    
+    @RequestMapping(value = "/home/patient/{id}/rdv-{rdvId}", method = RequestMethod.GET)
+    public String viewRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id, @PathVariable String rdvId) {
+    	Patient patient = patientService.findById(id);
+    	
+    	map.put(ConstantesUtil.VIEW_TITLE, "Rendez-vous");
+    	map.put("patient", patient);
+    	map.put("rendezVous", rendezVousService.getRepo().findOne(Long.parseLong(rdvId)));
+    	
+		return "views/patient/rdv";
+    }
+    
+    @RequestMapping(value = "/home/patient/{id}/rdv-{rdvId}", method = RequestMethod.POST)
+    public String postRendezVous(
+    		HttpServletRequest request,
+    		ModelMap map,
+    		@PathVariable String id,
+    		@PathVariable String rdvId,
+    		@RequestParam(value="notesAvant", required = false) String notesAvant,
+    		@RequestParam(value="notesApres", required = false) String notesApres) {
+    	Patient patient = patientService.findById(id);
+    	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
+    	boolean notesOk = false;
+    	
+    	if (notesAvant != null) {
+    		rdv.setNotesAvant(notesAvant);
+    		notesOk = true;
+    	}
+    	
+    	if (notesApres != null) {
+    		rdv.setNotesAvant(notesApres);  
+    		notesOk = true;  		
+    	}
+    	
+    	rendezVousService.getRepo().save(rdv);
+    	
+    	map.put(ConstantesUtil.VIEW_TITLE, "Rendez-vous");
+    	map.put("patient", patient);
+    	map.put("rendezVous", rdv);
+    	map.put("notesOk", notesOk);
+    	
+		return "views/patient/rdv";
     }
 }

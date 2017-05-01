@@ -19,6 +19,7 @@
                 	<th>Prenom</th>
                 	<th>Adresse</th>
                 	<th>Téléphone</th>
+                	<th>Supprimer patient</th>
                 </thead>
                 <tbody>
                 {{#patients}}
@@ -28,6 +29,11 @@
                 		<td>{{this.prenom}}</td>
                 		<td>{{this.adresse}}</td>
                 		<td>{{this.telephone}}</td>
+                		<td>
+                			<a href="/home/patient/{{this.id}}/delete">
+                				<button class="btn btn-sm btn-danger btn-icon"><i class="fa fa-times"></i></button>
+               				</a>
+                		</td>
                 	</tr>
                 {{/patients}}
                 </tbody>

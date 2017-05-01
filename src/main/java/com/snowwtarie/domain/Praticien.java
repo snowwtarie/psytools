@@ -2,6 +2,7 @@ package com.snowwtarie.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -49,6 +50,9 @@ public class Praticien implements Serializable {
     
     @OneToMany(mappedBy = "praticien", fetch= FetchType.LAZY, cascade = CascadeType.DETACH)
     @Getter @Setter private Set<Patient> patients;
+    
+    @OneToMany(mappedBy = "praticien", fetch= FetchType.LAZY, cascade = CascadeType.DETACH)
+    @Getter @Setter private List<Paiement> listePaiements;
     
     public Praticien() {
         /**
