@@ -46,4 +46,18 @@ public class Paiement {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	@Getter @Setter Praticien praticien;
+	
+	public Paiement() {
+		/**
+		 * 
+		 */
+	}
+	
+	public Paiement(Date pDatePaiement, Float pMontant, TypeReglement pTypeReglement, RendezVous pRendezVous, Praticien pPraticien) {
+		this.datePaiement = pDatePaiement;
+		this.montant = pMontant;
+		this.typeReglement = pTypeReglement;
+		this.rendezVous = pRendezVous;
+		this.praticien = pPraticien;
+	}
 }

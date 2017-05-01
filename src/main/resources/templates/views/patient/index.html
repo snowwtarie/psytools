@@ -19,19 +19,19 @@
                 	<th>Prenom</th>
                 	<th>Adresse</th>
                 	<th>Téléphone</th>
-                	<th>Supprimer patient</th>
+                	<th>&nbsp;</th>
                 </thead>
                 <tbody>
                 {{#patients}}
                 	<tr>
-                		<td><a href="/home/patient/{{this.id}}">{{this.id}}</a></td>
+                		<td><a href="/home/patient-{{this.id}}">{{this.id}}</a></td>
                 		<td>{{this.nom}}</td>
                 		<td>{{this.prenom}}</td>
                 		<td>{{this.adresse}}</td>
                 		<td>{{this.telephone}}</td>
                 		<td>
-                			<a href="/home/patient/{{this.id}}/delete">
-                				<button class="btn btn-sm btn-danger btn-icon"><i class="fa fa-times"></i></button>
+                			<a href="/home/patient-{{this.id}}/delete">
+                				<button class="btn btn-sm btn-danger btn-icon" id="delPatient">Supprimer patient <i class="fa fa-times"></i></button>
                				</a>
                 		</td>
                 	</tr>

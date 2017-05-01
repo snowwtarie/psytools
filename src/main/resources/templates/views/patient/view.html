@@ -55,7 +55,7 @@
 		                <div class="col-md-12">
 		                    <div class="form-group">
 		                        <label>Notes</label>
-		                        <textarea rows="5" class="form-control border-input" name="notes" id="notes" value="{{patient.note}}" readonly></textarea>
+		                        <textarea rows="5" class="form-control border-input" name="notes" id="notes" readonly>{{patient.note}}</textarea>
 		                    </div>
 		                </div>
 		            </div>
@@ -78,12 +78,10 @@
                 	<li>
                     	<div class="row">
                         	<div class="col-xs-3">
-                        		{{this.id}}
+                        		{{this.dateRendezVous}}
 	                        </div>
 	                        <div class="col-xs-4">
 	                            {{this.nomRendezVous}}
-	                            <br />
-	                            <span class="text-muted"><small>{{this.dateRendezVous}}</small></span>
 	                        </div>
 	                        <div class="col-xs-2">
 	                            {{#this.hasPaid}}
@@ -94,7 +92,7 @@
 								{{/this.hasPaid}}
 	                        </div>
 	                        <div class="col-xs-3 text-right">
-	                            <a href="/home/patient/{{patient.id}}/rdv/{{this.id}}"><btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></btn></a>
+	                            <a href="/home/patient-{{patient.id}}/rdv-{{this.id}}"><btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></btn></a>
 	                        </div>
 	                    </div>
 	                </li>	                
@@ -118,23 +116,26 @@
                 	<li>
                     	<div class="row">
                         	<div class="col-xs-3">
-                        		{{this.id}}
+                        		{{this.dateRendezVous}}
 	                        </div>
 	                        <div class="col-xs-4">
 	                            {{this.nomRendezVous}}
-	                            <br />
-	                            <span class="text-muted"><small>{{this.dateRendezVous}}</small></span>
 	                        </div>
 	                        <div class="col-xs-2">
 	                            {{#this.hasPaid}}
-	                            <i class="fa fa-check"></i>
+                            	<i class="fa fa-check"></i>
 	                            {{/this.hasPaid}}
 								{{^this.hasPaid}}
-	                            <i class="fa fa-times"></i>
+									{{#this.status}}
+                            		<i class="fa fa-clock-o"></i>                            		
+									{{/this.status}}
+									{{^this.status}}
+                            		<i class="fa fa-times"></i>                            		
+									{{/this.status}}
 								{{/this.hasPaid}}
 	                        </div>
 	                        <div class="col-xs-3 text-right">
-	                            <a href="/home/patient/{{patient.id}}/rdv-{{this.id}}"><button class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></button></a>
+	                            <a href="/home/patient-{{patient.id}}/rdv-{{this.id}}"><button class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></button></a>
 	                        </div>
 	                    </div>
 	                </li>	                

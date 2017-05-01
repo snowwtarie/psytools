@@ -10,6 +10,7 @@ public class ConstantesUtil {
 
     public static final String ATTR_USER = "ATTR_USER";
     public static final String VIEW_TITLE = "title";
+    public static final String URI = "uri";
 
     public ConstantesUtil() {
         /**

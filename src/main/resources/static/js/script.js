@@ -32,4 +32,35 @@ $(document).ready(function() {
             timer: 4000
         });
     }
+
+    if ($('#paiementOk').length > 0) {
+        $.notify({
+            icon: 'ti-info-alt',
+            message: "Enregistrement du <strong>paiement</strong> réussi"
+
+        },{
+            type: 'success',
+            timer: 4000
+        });
+    }
+    
+    $('#annulerRdv').on('click', function(event) {
+    	var delOk = confirm('Voulez-vous vraiment supprimer ce rendez-vous ?');
+    	
+    	event.preventDefault();
+    	
+    	if (delOk) {
+    		window.location = location.pathname + '/cancel';
+    	}
+    })
+    
+    $('#annulerRdv').on('click', function(event) {
+    	var delOk = confirm('Voulez-vous vraiment supprimer ce patient ?');
+    	
+    	event.preventDefault();
+    	
+    	if (delOk) {
+    		window.location = location.pathname + '/cancel';
+    	}
+    })
 });

@@ -27,20 +27,34 @@
 		                <div class="col-md-12">
 		                    <div class="form-group">
 		                        <label>Date du rendez-vous</label>
-		                        <input type="date" class="form-control border-input" placeholder="Date de naissance" name="dateRdv" id="dateRdv" value="{{rendezVous.dateRendezVous}}" readonly>
+		                        <input type="date" class="form-control border-input" placeholder="Date du rendez-vous" name="dateRdv" id="dateRdv" value="{{rendezVous.dateRendezVous}}" readonly>
 		                    </div>
 		                </div>
 		            </div>
-		
-		            
+		            	
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Creneau</label>
+		                       	<select class="form-control border-input" name="creneau" {{#rendezVous.status}}disabled{{/rendezVous.status}}>
+		                       		{{#creneaux}}
+		                       			{{#value}}
+		                       			<option value={{key}}>{{key}}</option>
+		                       			{{/value}}
+		                       			{{^value}}
+		                       			<option value={{key}} disabled>{{key}}</option>
+		                       			{{/value}}
+		                       		{{/creneaux}} 
+		                       	</select>
+		                    </div>
+		                </div>
+		            </div>		            
 		
 		            <div class="row">
 		                <div class="col-md-12">
 		                    <div class="form-group">
 		                        <label>Notes avant rendez-vous</label>
-		                        <textarea rows="5" class="form-control border-input" name="notesAvant" id="notesAvant" {{#rendezVous.status}}disabled{{/rendezVous.status}}>
-		                        	{{#rendezVous.notesAvant}}{{rendezVous.notesAvant}}{{/rendezVous.notesAvant}}
-		                        </textarea>
+		                        <textarea rows="5" class="form-control border-input" name="notesAvant" id="notesAvant" {{#rendezVous.status}}disabled{{/rendezVous.status}}>{{#rendezVous.notesAvant}}{{rendezVous.notesAvant}}{{/rendezVous.notesAvant}}</textarea>
 		                    </div>
 		                </div>
 		            </div>
@@ -49,20 +63,21 @@
 		                <div class="col-md-12">
 		                    <div class="form-group">
 		                        <label>Notes après rendez-vous</label>
-		                        <textarea rows="5" class="form-control border-input" name="notesApres" id="notesApres" {{^rendezVous.status}}disabled{{/rendezVous.status}}>
-		                        	{{#rendezVous.notesApres}}{{rendezVous.notesApres}}{{/rendezVous.notesApres}}
-		                        </textarea>
+		                        <textarea rows="5" class="form-control border-input" name="notesApres" id="notesApres" {{^rendezVous.status}}disabled{{/rendezVous.status}}>{{#rendezVous.notesApres}}{{rendezVous.notesApres}}{{/rendezVous.notesApres}}</textarea>
 		                    </div>
 		                </div>
 		            </div>
 		            <div class="text-center">
-		                <button type="submit" class="btn btn-info btn-fill btn-wd">Enregistrer notes</button>
+		                <button type="submit" class="btn btn-info btn-fill btn-wd">Sauvegarder</button>
 		                {{#rendezVous.status}}	                
 		                	<button type="button" class="btn btn-primary btn-fill btn-wd">Editer facture</button>
+		                	{{^rendezVous.hasPaid}}
+		                	<a href="{{uri}}/paiement"><button type="button" class="btn btn-success btn-fill btn-wd">Enregistrer paiement</button></a>
+		                	{{/rendezVous.hasPaid}}
 	                	{{/rendezVous.status}}
 		                {{^rendezVous.status}}	                
 		                	<button type="button" class="btn btn-success btn-fill btn-wd">Cloturer rendez-vous</button>	                
-		                	<button type="submit" class="btn btn-danger btn-fill btn-wd">Annuler rendez-vous</button>
+		                	<button type="button" class="btn btn-danger btn-fill btn-wd" id="annulerRdv">Annuler rendez-vous</button>
 	                	{{/rendezVous.status}}
 		            </div>
 		            <div class="clearfix"></div>
@@ -72,5 +87,8 @@
 	</div>	
 	{{#notesOk}}
 	<input type="hidden" name="notesOk" value="{{notesOk}}" id="notesOk" />
-	{{/notesOk}}
+	{{/notesOk}}	
+	{{#paiementOk}}
+	<input type="hidden" name="paiementOk" value="{{paiementOk}}" id="paiementOk" />
+	{{/paiementOk}}
 {{>layout/footer}}

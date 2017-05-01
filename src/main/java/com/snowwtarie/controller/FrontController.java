@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.snowwtarie.domain.Paiement;
 import com.snowwtarie.domain.PaiementService;
+import com.snowwtarie.domain.PaiementService.TypeReglement;
 import com.snowwtarie.domain.Patient;
 import com.snowwtarie.domain.Praticien;
 import com.snowwtarie.domain.RendezVous;
 import com.snowwtarie.service.AuthService;
 import com.snowwtarie.service.ConstantesUtil;
+import com.snowwtarie.service.ConstantesUtil.Creneau;
 import com.snowwtarie.service.PatientService;
 import com.snowwtarie.service.RendezVousService;
 
@@ -170,11 +173,12 @@ public class FrontController {
     	}    	
     }
     
-    @RequestMapping(value = "/home/patient/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/home/patient-{id}", method = RequestMethod.GET)
     public String viewPatient(HttpServletRequest request, ModelMap map, @PathVariable String id) {
     	Patient patient = patientService.findById(id);
     	
     	map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
     	map.put("patient", patient);
     	map.put("rendezVousPasse", rendezVousService.getAllRendezVousPasse(patient));
     	map.put("rendezVousFutur", rendezVousService.getAllRendezVousFutur(patient));
@@ -182,25 +186,43 @@ public class FrontController {
     	return "views/patient/view";
     }
     
-    @RequestMapping(value = "/home/patient/{id}/rdv-{rdvId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}", method = RequestMethod.GET)
     public String viewRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id, @PathVariable String rdvId) {
     	Patient patient = patientService.findById(id);
+    	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
     	
     	map.put(ConstantesUtil.VIEW_TITLE, "Rendez-vous");
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
     	map.put("patient", patient);
-    	map.put("rendezVous", rendezVousService.getRepo().findOne(Long.parseLong(rdvId)));
+    	map.put("rendezVous", rdv);
+    	map.put("creneaux", rendezVousService.getCreneauxDispos(rdv.getDateRendezVous()).entrySet());
     	
 		return "views/patient/rdv";
     }
     
-    @RequestMapping(value = "/home/patient/{id}/rdv-{rdvId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}/cancel", method = RequestMethod.GET)
+    public String cancelRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id, @PathVariable String rdvId) {
+    	Patient patient = patientService.findById(id);
+    	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
+    	
+    	map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
+    	map.put("patient", patient);
+    	
+    	rendezVousService.getRepo().delete(rdv);
+    	
+		return "redirect:/home/patient-"+id;
+    }
+    
+    @RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}", method = RequestMethod.POST)
     public String postRendezVous(
     		HttpServletRequest request,
     		ModelMap map,
     		@PathVariable String id,
     		@PathVariable String rdvId,
     		@RequestParam(value="notesAvant", required = false) String notesAvant,
-    		@RequestParam(value="notesApres", required = false) String notesApres) {
+    		@RequestParam(value="notesApres", required = false) String notesApres,
+    		@RequestParam(value="creneau", required = false) String creneau) {
     	Patient patient = patientService.findById(id);
     	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
     	boolean notesOk = false;
@@ -211,17 +233,77 @@ public class FrontController {
     	}
     	
     	if (notesApres != null) {
-    		rdv.setNotesAvant(notesApres);  
+    		rdv.setNotesApres(notesApres);  
     		notesOk = true;  		
+    	}
+    	
+    	if (creneau != null) {
+    		rdv.setCreneau(Creneau.valueOf(creneau));
     	}
     	
     	rendezVousService.getRepo().save(rdv);
     	
     	map.put(ConstantesUtil.VIEW_TITLE, "Rendez-vous");
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
     	map.put("patient", patient);
     	map.put("rendezVous", rdv);
     	map.put("notesOk", notesOk);
+    	map.put("creneaux", rendezVousService.getCreneauxDispos(rdv.getDateRendezVous()).entrySet());
     	
 		return "views/patient/rdv";
+    }
+    
+    @RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}/paiement", method = RequestMethod.GET)
+    public String paiementRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id, @PathVariable String rdvId) {
+    	Patient patient = patientService.findById(id);
+    	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
+    	
+    	map.put(ConstantesUtil.VIEW_TITLE, "Paiement");
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
+    	map.put("patient", patient);
+    	map.put("rendezVous", rdv);
+    	map.put("typePaiement", TypeReglement.values());
+    	
+		return "views/patient/paiement";
+    }
+    
+    @RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}/paiement", method = RequestMethod.POST)
+    public String paiementRendezVousPost(
+    		HttpServletRequest request,
+    		ModelMap map,
+    		@PathVariable String id,
+    		@PathVariable String rdvId,
+    		@RequestParam(name="datePaiement") String datePaiement,
+    		@RequestParam(name="montant") String montant,
+    		@RequestParam(name="reglement") String reglement) {
+    	Patient patient = patientService.findById(id);
+    	Praticien praticien = (Praticien) request.getSession().getAttribute(ConstantesUtil.ATTR_USER);
+    	RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
+    	Paiement paiement = null;
+    	
+    	try {
+    		paiement = new Paiement(ConstantesUtil.stringToDate(datePaiement), Float.valueOf(montant), TypeReglement.valueOf(reglement), rdv, praticien);
+    		paiementService.getRepo().save(paiement);
+    		rdv.setHasPaid(true);
+    		rendezVousService.getRepo().save(rdv);
+    	} catch (Exception e) {
+    		System.err.println("Erreur lors de l'enregitrement du paiement");
+    	}
+    	
+    	map.put(ConstantesUtil.URI, request.getRequestURI());
+    	map.put("patient", patient);
+    	map.put("rendezVous", rendezVousService.getRepo().findOne(Long.parseLong(rdvId)));
+    	
+    	if (paiement == null) {
+     		map.put(ConstantesUtil.VIEW_TITLE, "Paiement");
+    		map.put("typePaiement", TypeReglement.values());
+    		map.put("paiementNok", true);
+    		
+    		return "views/patient/paiement";
+    	} else {
+     		map.put(ConstantesUtil.VIEW_TITLE, "Rendez-vous");
+     		map.put("paiementOk", true);
+    		return "redirect:/home/patient-"+id+"/rdv-"+rdvId;
+    	}    	
     }
 }
