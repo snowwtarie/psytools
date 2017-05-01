@@ -1,0 +1,9 @@
+{{>layout/layout}}
+<h2 class="text-center">PsyTools</h2>
+	{{#loggedIn}}
+	    <input type="hidden" id="logged-in" value="loggedIn" />
+	{{/loggedIn}}
+	{{#signedIn}}
+	    <input type="hidden" id="signed-in" value="signed-in" />
+	{{/signedIn}}
+{{>layout/footer}}

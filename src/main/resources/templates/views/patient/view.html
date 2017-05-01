@@ -1,0 +1,111 @@
+{{>layout/layout}}
+	<div class="col-lg-8 col-md-8">
+		<div class="card">
+		    <div class="content">
+		        <form method="post">		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Nom *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Nom" name="nom" id="nom" value="{{patient.nom}}" readonly>
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Prénom *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Prénom" name="prenom" id="prenom" value="{{patient.prenom}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Date de naissance *</label>
+		                        <input type="date" class="form-control border-input" placeholder="Date de naissance" name="dob" id="dob" value="{{patient.dateOfBirth}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Adresse</label>
+		                        <input type="text" class="form-control border-input" placeholder="Adresse" name="adresse" id="adresse" value="{{patient.adresse}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Email *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Adresse email" name="email" id="email" value="{{patient.email}}" readonly>
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Téléphone *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Téléphone" name="phone" id="phone" value="{{patient.telephone}}" readonly>
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Notes</label>
+		                        <textarea rows="5" class="form-control border-input" name="notes" id="notes" value="{{patient.note}}" readonly></textarea>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="text-center">
+		                <button type="submit" class="btn btn-info btn-fill btn-wd">Mettre à jour</button>
+		            </div>
+		            <div class="clearfix"></div>
+		        </form>
+		    </div>
+		</div>
+	</div>
+	<div class="col-lg-4 col-md-4">
+		<div class="card">
+	    	<div class="header">
+            	<h4 class="title">Rendez-vous</h4>
+	        </div>
+	        <div class="content">
+            	<ul class="list-unstyled team-members">
+            	{{#rendezVous}}
+                	<li>
+                    	<div class="row">
+                        	<div class="col-xs-3">
+                        		{{this.id}}
+	                        </div>
+	                        <div class="col-xs-4">
+	                            {{this.nomRendezVous}}
+	                            <br />
+	                            <span class="text-muted"><small>{{this.dateRendezVous}}</small></span>
+	                        </div>
+	                        <div class="col-xs-2">
+	                            {{#this.hasPaid}}
+	                            <i class="fa fa-check"></i>
+	                            {{/this.hasPaid}}
+								{{^this.hasPaid}}
+	                            <i class="fa fa-times"></i>
+								{{/this.hasPaid}}
+	                        </div>
+	                        <div class="col-xs-3 text-right">
+	                            <a href="/home/patient/{{patient.id}}/rdv/{{this.id}}"><btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></btn></a>
+	                        </div>
+	                    </div>
+	                </li>	                
+            	{{/rendezVous}}
+	            </ul>	            
+	            <div class="text-center">
+	                <button type="button" class="btn btn-info btn-fill btn-wd" data-toggle="modal" data-target="#modalRdvForm">Nouveau rendez-vous</button>
+	            </div>
+	            <div class="clearfix"></div>
+	        </div>
+	    </div>
+	</div>	
+{{>layout/ajax/formRdv}}
+{{>layout/footer}}

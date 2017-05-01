@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/auth.css">
+		<title>PsyTools - {{title}}</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="card card-container">
+				<img id="profile-img" class="profile-img-card" src="img/avatar_2x.png" />
+				<p id="profile-name" class="profile-name-card"></p>
+				<!-- if login fail -->				
+               	{{#login_fail}}
+                    <div class="alert alert-danger fade in out" role"=alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>login_fail</strong>
+                    </div>		
+               	{{/login_fail}}
+				<form class="form-login" action="login" method="post">
+					<span id="reauth-email" class="reauth-email"></span>
+					<input type="email" name ="email" id="email" class="form-control" placeholder="Adresse mail" />
+					<input type="password" name ="password" id="password" class="form-control" placeholder="Mot de passe" />
+					<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Connexion</button>
+				</form>
+				<div class="text-center">
+					<a href="#" class="forgot-password">Mot de passe oublié ?</a> - <a href="signin" class="forgot-password">Pas encore de compte ?</a>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/auth.js"></script>
+	</body>
+</html>

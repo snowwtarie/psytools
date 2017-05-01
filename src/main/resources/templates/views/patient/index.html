@@ -1,0 +1,40 @@
+{{>layout/layout}}
+<div class="row">
+	<div class="col-xs-offset-4 col-xs-3">
+		<a href="/home/patient/new"><button type="button" class="btn btn-large btn-primary btn-block">Nouveau patient</button></a>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="col-md-12">
+    <div class="card card-plain">
+        <div class="header">
+            <h4 class="title">Liste des patients</h4>
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-striped">
+                <thead>
+                    <th>ID</th>
+                	<th>Nom</th>
+                	<th>Prenom</th>
+                	<th>Adresse</th>
+                	<th>Téléphone</th>
+                </thead>
+                <tbody>
+                {{#patients}}
+                	<tr>
+                		<td><a href="/home/patient/{{this.id}}">{{this.id}}</a></td>
+                		<td>{{this.nom}}</td>
+                		<td>{{this.prenom}}</td>
+                		<td>{{this.adresse}}</td>
+                		<td>{{this.telephone}}</td>
+                	</tr>
+                {{/patients}}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+</div>
+{{>layout/footer}}

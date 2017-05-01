@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/auth.css">
+		<title>PsyTools - {{title}}</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="card card-container">
+				<img id="profile-img" class="profile-img-card" src="img/avatar_2x.png" />
+				<p id="profile-name" class="profile-name-card"></p>
+				{{#usr_exist}}
+					<div class="alert alert-danger fade in out" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>{{usr_exist}}</strong>
+					</div>
+				{{/usr_exist}}
+				<form class="form-signin" action="signin" method="post">
+					<span id="reauth-email" class="reauth-email"></span>
+					<input type="text" name="inputNom" id="inputNom" class="form-control" placeholder="Nom" required, autofocus>
+					<input type="text" name="inputPrenom" id="inputPrenom" class="form-control" placeholder="Prenom" required>
+					<input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email" required>
+					<input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+					<input type="password" name="inputPasswordRe" id="inputPasswordRe" class="form-control" placeholder="Vérifier le mot de passe" required>
+					<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Inscription</button>
+				</form>
+				<div class="text-center">
+					<a href="login" class="forgot-password">Déjà inscrit ?</a>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/auth.js"></script>
+	</body>
+</html>
