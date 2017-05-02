@@ -43,6 +43,12 @@ public class Patient implements Serializable {
     @Column(name = "adresse")
     @Getter @Setter private String adresse;
 
+    @Column(name = "ville")
+    @Getter @Setter private String ville;
+
+    @Column(name = "cp")
+    @Getter @Setter private String codePostal;
+
     @Column(name = "email")
     @Getter @Setter private String email;
 
@@ -65,13 +71,15 @@ public class Patient implements Serializable {
     	 */
     }
     
-	public Patient(String pNom, String pPrenom, Date pDateOfBirth, String pAdresse, String pEmail, String pTelephone,
+	public Patient(String pNom, String pPrenom, Date pDateOfBirth, String pAdresse, String pVille, String pCodePostal, String pEmail, String pTelephone,
 			String pNote, Praticien pPraticien) {
 		super();
 		this.nom = pNom;
 		this.prenom = pPrenom;
 		this.dateOfBirth = pDateOfBirth;
 		this.adresse = pAdresse;
+		this.ville = pVille;
+		this.codePostal = pCodePostal;
 		this.email = pEmail;
 		this.telephone = pTelephone;
 		this.note = pNote;

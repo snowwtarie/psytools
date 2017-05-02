@@ -68,17 +68,14 @@ public class RendezVous {
 	}
 	
 	public RendezVous(Patient pPatient, String pNomRendezVous, Date pDateRendezVous, String pNoteAvant) {
+		new RendezVous(pPatient, pNomRendezVous, pDateRendezVous, pNoteAvant, "", false, false);
+	}
+	
+	public RendezVous(Patient pPatient, String pNomRendezVous, Date pDateRendezVous, String pNoteAvant, String pNoteApres, Boolean pHasPaid, Boolean pStatus) {
 		this.patient = pPatient;
 		this.nomRendezVous = pNomRendezVous;
 		this.dateRendezVous = pDateRendezVous;
 		this.notesAvant = pNoteAvant;
-		this.notesApres = "";
-		this.hasPaid = false;
-		this.status = false;
-	}
-	
-	public RendezVous(Patient pPatient, String pNomRendezVous, Date pDateRendezVous, String pNoteAvant, String pNoteApres, Boolean pHasPaid, Boolean pStatus) {
-		new RendezVous(pPatient, pNomRendezVous, pDateRendezVous, pNoteAvant);
 		this.notesApres = pNoteApres;
 		this.hasPaid = pHasPaid;
 		this.status = pStatus;

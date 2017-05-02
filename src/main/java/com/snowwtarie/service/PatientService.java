@@ -11,18 +11,30 @@ import com.snowwtarie.domain.Patient;
 import com.snowwtarie.domain.PatientRepository;
 import com.snowwtarie.domain.Praticien;
 
+import lombok.Getter;
+
 @Component("patientService")
 public class PatientService {
 	
 	@Resource
-	PatientRepository patientRepository;
+	@Getter PatientRepository patientRepository;
 	
-	public Patient addPatient(String nom, String prenom, String dateOfBirth, String email, String telephone, String adresse, String notes, Praticien praticien) {
+	public Patient addPatient(
+			String nom,
+			String prenom,
+			String dateOfBirth,
+			String email,
+			String telephone,
+			String adresse,
+			String ville,
+			String codePostal,
+			String notes,
+			Praticien praticien) {
     	Patient patient = null;
     	Date date = ConstantesUtil.stringToDate(dateOfBirth);    	
     	
     	if(date != null) {
-    		patient = new Patient(nom, prenom, date, adresse, email, ConstantesUtil.formatPhone(telephone), notes, praticien);
+    		patient = new Patient(nom, prenom, date, adresse, ville, codePostal, email, ConstantesUtil.formatPhone(telephone), notes, praticien);
         	
         	try {
         		patient = patientRepository.save(patient);

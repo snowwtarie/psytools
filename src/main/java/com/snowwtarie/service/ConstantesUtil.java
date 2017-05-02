@@ -3,7 +3,10 @@ package com.snowwtarie.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ConstantesUtil {
@@ -33,6 +36,16 @@ public class ConstantesUtil {
 		}
     	
     	return date;
+    }
+    
+    public static List<String> buildFilAriane(String referer) {
+    	List<String> filAriane = new ArrayList<>();
+    	String temp = referer;
+    	
+    	referer.replaceAll("http://localhost", "");
+    	Collections.addAll(filAriane, referer.split("/"));
+    	
+    	return filAriane;
     }
     
     public enum Creneau {

@@ -37,15 +37,22 @@ public class Praticien implements Serializable {
     @Column(name = "prenom", nullable = false)
     @Getter @Setter private String prenom;
 
+    @Column(name = "adresse", columnDefinition = "varchar(255) default ''")
     @Getter @Setter  private String adresse;
+
+    @Column(name = "ville", columnDefinition = "varchar(255) default ''")
+    @Getter @Setter private String ville;
+
+    @Column(name = "cp", columnDefinition = "varchar(255) default ''")
+    @Getter @Setter private String codePostal;
     
-    @Column(name = "telephone", length = 20)
+    @Column(name = "telephone", length = 20, columnDefinition = "varchar(255) default ''")
     @Getter @Setter private String telephone;
 
     @Column(name = "email", nullable = false, unique = true)
     @Getter @Setter private String email;
     
-    @Column(name = "siret")
+    @Column(name = "siret", columnDefinition = "varchar(255) default ''")
     @Getter @Setter private String siret;
     
     @OneToMany(mappedBy = "praticien", fetch= FetchType.LAZY, cascade = CascadeType.DETACH)

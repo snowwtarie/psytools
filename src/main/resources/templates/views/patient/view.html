@@ -1,6 +1,10 @@
 {{>layout/layout}}
 	<div class="col-lg-8 col-md-8">
 		<div class="card">
+		    <div class="header">
+		        <h4 class="title">Profil patient</h4>
+            	<p class="category">Les champs suivis d'un * sont obligatoires</p>
+		    </div>
 		    <div class="content">
 		        <form method="post">		
 		            <div class="row">
@@ -92,14 +96,14 @@
 								{{/this.hasPaid}}
 	                        </div>
 	                        <div class="col-xs-3 text-right">
-	                            <a href="/home/patient-{{patient.id}}/rdv-{{this.id}}"><btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></btn></a>
+	                            <a href="{{uri}}/rdv-{{this.id}}"><btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></btn></a>
 	                        </div>
 	                    </div>
 	                </li>	                
             	{{/rendezVousFutur}}
 	            </ul>	            
 	            <div class="text-center">
-	                <button type="button" class="btn btn-info btn-fill btn-wd" data-toggle="modal" data-target="#modalRdvForm">Nouveau rendez-vous</button>
+	                <a href="{{uri}}/rdv-new"><button type="button" class="btn btn-info btn-fill btn-wd">Nouveau rendez-vous</button></a>
 	            </div>
 	            <div class="clearfix"></div>
 	        </div>
@@ -135,7 +139,7 @@
 								{{/this.hasPaid}}
 	                        </div>
 	                        <div class="col-xs-3 text-right">
-	                            <a href="/home/patient-{{patient.id}}/rdv-{{this.id}}"><button class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></button></a>
+	                            <a href="{{uri}}/rdv-{{this.id}}"><button class="btn btn-sm btn-success btn-icon"><i class="fa fa-arrow-right"></i></button></a>
 	                        </div>
 	                    </div>
 	                </li>	                
@@ -144,5 +148,4 @@
 	        </div>
 	    </div>
 	</div>
-{{>layout/ajax/formRdv}}
 {{>layout/footer}}

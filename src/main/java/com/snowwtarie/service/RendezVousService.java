@@ -47,15 +47,22 @@ public class RendezVousService {
 		return liste;
 	}
 	
-	public Map<Creneau, Boolean> getCreneauxDispos(Date dateRendezVous) {
+	public Map<Creneau, Boolean> getCreneaux() {
 		Map<Creneau, Boolean> creneaux = new HashMap<>();
-		List<RendezVous> listeRdv = new ArrayList<>();
-		
-		listeRdv = repo.findAllByDateRendezVous(dateRendezVous);
 		
 		for (Creneau c : Creneau.values()) {
 			creneaux.put(c, true);
 		}
+		
+		return creneaux;
+	}
+	
+	public Map<Creneau, Boolean> getCreneauxDispos(Date dateRendezVous) {
+		Map<Creneau, Boolean> creneaux;
+		List<RendezVous> listeRdv = new ArrayList<>();
+		
+		listeRdv = repo.findAllByDateRendezVous(dateRendezVous);
+		creneaux = getCreneaux();
 		
 		for (RendezVous rdv : listeRdv) {
 			creneaux.put(rdv.getCreneau(), false);

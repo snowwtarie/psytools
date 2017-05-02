@@ -1,0 +1,103 @@
+{{>layout/layout}}
+	<div class="col-lg-12 col-md-12">
+		<div class="card">
+		    <div class="header">
+		        <h4 class="title">Profil praticien</h4>
+            	<p class="category">Les champs suivis d'un * sont obligatoires</p>
+		    </div>
+		    <div class="content">
+		        <form method="post">		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Nom *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Nom" name="nom" id="nom" value="{{praticien.nom}}">
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Prénom *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Prénom" name="prenom" id="prenom" value="{{praticien.prenom}}">
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Adresse</label>
+		                        <input type="text" class="form-control border-input" placeholder="Adresse" name="adresse" id="adresse" value="{{praticien.adresse}}">
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Ville *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Ville" name="ville" id="ville" value="{{praticien.ville}}">
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Code postal *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Code postal" name="cp" id="cp" value="{{praticien.codePostal}}">
+		                    </div>
+		                </div>
+		            </div>
+		
+		
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <div class="form-group">
+		                        <label>Siret</label>
+		                        <input type="text" class="form-control border-input" placeholder="N° SIRET" name="siret" id="siret" value="{{praticien.adresse}}">
+		                    </div>
+		                </div>
+		            </div>
+		            
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Email *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Adresse email" name="email" id="email" value="{{praticien.email}}">
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Téléphone *</label>
+		                        <input type="text" class="form-control border-input" placeholder="Téléphone" name="phone" id="phone" value="{{praticien.telephone}}">
+		                    </div>
+		                </div>
+		            </div>
+		
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Ancien mot de passe *</label>
+		                        <input type="text" class="form-control border-input" name="oldPassword" id="oldPassword">
+		                    </div>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="form-group">
+		                        <label>Nouveau mot de passe *</label>
+		                        <input type="text" class="form-control border-input" name="newPassword" id="newPassword">
+		                    </div>
+		                </div>
+		            </div>
+
+		            <div class="text-center">
+		                <button type="submit" class="btn btn-info btn-fill btn-wd">Mettre à jour</button>
+		            </div>
+		            <div class="clearfix"></div>
+		        </form>
+		    </div>
+		</div>
+	</div>
+	{{^pwdCheck}}
+	<input type="hidden" name="pwdCheck" />
+	{{/pwdCheck}}
+	{{#saveOk}}
+	<input type="hidden" name="pwdCheck" />
+	{{/saveOk}}
+{{>layout/footer}}

@@ -1,7 +1,6 @@
 package com.snowwtarie.service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -9,13 +8,15 @@ import org.springframework.stereotype.Component;
 import com.snowwtarie.domain.Praticien;
 import com.snowwtarie.domain.PraticienRepository;
 
+import lombok.Getter;
+
 @Component("authService")
 public class AuthService {
 
     private final static ShaPasswordEncoder SHA = new ShaPasswordEncoder(512);
 
     @Resource
-    private PraticienRepository repo;
+    @Getter private PraticienRepository repo;
 
     public Praticien login(String password, String email) {
         Praticien praticien = null;
@@ -52,5 +53,21 @@ public class AuthService {
         }
 
         return praticien;
+    }
+    
+    public String encodePassword(String password) {
+    	return SHA.encodePassword(password, "");
+    }
+    
+    public boolean checkPassword(String password, String passwordToCheck) {
+    	boolean samePwd = true;
+    	
+    	String hashedPassword = SHA.encodePassword(passwordToCheck, "");
+    	
+    	if (!password.equals(hashedPassword)) {
+    		samePwd = false;
+    	}
+    	
+    	return samePwd;
     }
 }
