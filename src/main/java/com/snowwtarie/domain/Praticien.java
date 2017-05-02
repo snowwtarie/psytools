@@ -67,16 +67,20 @@ public class Praticien implements Serializable {
          */
     }
 
-    public Praticien(String pNom, String pPrenom) {
-        this.nom = pNom;
-        this.prenom = pPrenom;
+    public Praticien(String pNom, String pPrenom, String pEmail, String pPassword) {
+    	this(pNom, pPrenom, pEmail, pPassword, "", "", "", "", "");
     }
 
-    public Praticien(String pNom, String pPrenom, String pEmail, String pPassword) {
+    public Praticien(String pNom, String pPrenom, String pEmail, String pPassword, String pAdresse, String pCodePostal, String pVille, String pSiret, String pTelephone) {
         this.nom = pNom;
         this.prenom = pPrenom;
         this.email = pEmail;
         this.password = pPassword;
+        this.adresse = pAdresse;
+        this.codePostal = pCodePostal;
+        this.ville = pVille;
+        this.siret = pSiret;
+        this.telephone = pTelephone;
     }
 
     @Override

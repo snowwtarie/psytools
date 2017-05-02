@@ -6,7 +6,7 @@
             	<p class="category">Les champs suivis d'un * sont obligatoires</p>
 		    </div>
 		    <div class="content">
-		        <form method="post">		
+		        <form action="{{uri}}" method="post">		
 		            <div class="row">
 		                <div class="col-md-6">
 		                    <div class="form-group">
@@ -51,7 +51,7 @@
 		                <div class="col-md-12">
 		                    <div class="form-group">
 		                        <label>Siret</label>
-		                        <input type="text" class="form-control border-input" placeholder="N° SIRET" name="siret" id="siret" value="{{praticien.adresse}}">
+		                        <input type="text" class="form-control border-input" placeholder="N° SIRET" name="siret" id="siret" value="{{praticien.siret}}">
 		                    </div>
 		                </div>
 		            </div>
@@ -75,13 +75,13 @@
 		                <div class="col-md-6">
 		                    <div class="form-group">
 		                        <label>Ancien mot de passe *</label>
-		                        <input type="text" class="form-control border-input" name="oldPassword" id="oldPassword">
+		                        <input type="password" class="form-control border-input" name="oldPassword" id="oldPassword">
 		                    </div>
 		                </div>
 		                <div class="col-md-6">
 		                    <div class="form-group">
 		                        <label>Nouveau mot de passe *</label>
-		                        <input type="text" class="form-control border-input" name="newPassword" id="newPassword">
+		                        <input type="password" class="form-control border-input" name="newPassword" id="newPassword">
 		                    </div>
 		                </div>
 		            </div>

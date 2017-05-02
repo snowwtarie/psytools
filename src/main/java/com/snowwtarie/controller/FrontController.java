@@ -44,6 +44,15 @@ public class FrontController {
 	@ModelAttribute
 	public void initMap(HttpServletRequest request, ModelMap map) {
 		//map.put("ariane", ConstantesUtil.buildFilAriane(request.getHeader("referer")));
+		map.put(ConstantesUtil.URI, request.getRequestURI());
+		// Si pas de header referer
+		// Renvoyer vers home avec message d'avertissement
+		// Sinon -> bouton retour
+		if(request.getHeader("referer") != null) {
+			map.put("retour", request.getHeader("referer"));
+		} else {
+			System.err.println("Par l'url !");
+		}
 	}
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -53,6 +62,7 @@ public class FrontController {
 			return "redirect:/login";
 		} else {
 			map.put(ConstantesUtil.VIEW_TITLE, "Home");
+			map.put("praticien", (Praticien) request.getSession().getAttribute(ConstantesUtil.ATTR_USER));
 			return "views/home";
 		}
 	}
@@ -78,11 +88,13 @@ public class FrontController {
 
 		if (praticien == null) {
 			map.put("login_fail", "Mauvaise combinaison email - mot de passe.");
+			map.put(ConstantesUtil.VIEW_TITLE, "Login");
 			view = "views/auth/login";
 		} else {
 			attr.addFlashAttribute("loggedIn", true);
+			map.put(ConstantesUtil.VIEW_TITLE, "Home");
 			request.getSession().setAttribute(ConstantesUtil.ATTR_USER, praticien);
-			view = "redirect:login";
+			view = "redirect:/home";
 		}
 
 		return view;
@@ -388,6 +400,8 @@ public class FrontController {
 			@RequestParam(name = "nom", required = false) String nom,
 			@RequestParam(name = "prenom", required = false) String prenom,
 			@RequestParam(name = "adresse", required = false) String adresse,
+			@RequestParam(name = "ville", required = false) String ville,
+			@RequestParam(name = "cp", required = false) String cp,
 			@RequestParam(name = "siret", required = false) String siret,
 			@RequestParam(name = "email", required = false) String email,
 			@RequestParam(name = "phone", required = false) String telephone,
@@ -401,11 +415,13 @@ public class FrontController {
 			boolean pwdCheck = true;
 
 			map.put(ConstantesUtil.VIEW_TITLE, "Profil praticien");
-			map.put("praticien", request.getSession().getAttribute(ConstantesUtil.ATTR_USER));
+			//map.put(ConstantesUtil.URI, request.getRequestURI());
 
 			praticien.setNom(nom);
 			praticien.setPrenom(prenom);
 			praticien.setAdresse(adresse);
+			praticien.setVille(ville);
+			praticien.setCodePostal(cp);
 			praticien.setSiret(siret);
 			praticien.setEmail(email);
 			praticien.setTelephone(telephone);
@@ -414,10 +430,12 @@ public class FrontController {
 				pwdCheck = authService.checkPassword(praticien.getPassword(), oldPassword);
 				if (pwdCheck) {
 					praticien.setPassword(authService.encodePassword(newPassword));
+					authService.getRepo().save(praticien);
 				}
 			}
 
 			map.put("pwdCheck", pwdCheck);
+			map.put("praticien", praticien);
 
 			request.getSession().setAttribute(ConstantesUtil.ATTR_USER, praticien);
 

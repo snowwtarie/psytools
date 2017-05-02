@@ -43,7 +43,7 @@ public class AuthService {
             hashedPassword = SHA.encodePassword(inputPassword, "");
             praticien = new Praticien(inputNom, inputPrenom, inputEmail, hashedPassword);
 
-            if (repo.findByNomAndPrenom(inputNom, inputPrenom) != null) {
+            if (repo.findByEmail(inputEmail) != null) {
                 praticien = new Praticien();
             } else {
                 repo.save(praticien);

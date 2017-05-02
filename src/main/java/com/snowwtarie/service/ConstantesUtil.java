@@ -63,6 +63,10 @@ public class ConstantesUtil {
     		this.noCreneau = pNoCreneau;
     	}
     }
+    
+    /**
+     * Essayer de faire un fil d'ariane
+     */
 }
 
 
