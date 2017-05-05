@@ -1,5 +1,10 @@
 package com.snowwtarie.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.snowwtarie.domain.BeanData;
 import com.snowwtarie.domain.Paiement;
 import com.snowwtarie.domain.PaiementService;
 import com.snowwtarie.domain.PaiementService.TypeReglement;
@@ -40,16 +46,18 @@ public class FrontController {
 
 	@Resource
 	private PaiementService paiementService;
-	
+
 	@ModelAttribute
 	public void initMap(HttpServletRequest request, ModelMap map) {
-		//map.put("ariane", ConstantesUtil.buildFilAriane(request.getHeader("referer")));
+		// map.put("ariane",
+		// ConstantesUtil.buildFilAriane(request.getHeader("referer")));
 		map.put(ConstantesUtil.URI, request.getRequestURI());
 		// Si pas de header referer
 		// Renvoyer vers home avec message d'avertissement
 		// Sinon -> bouton retour
-		if(request.getHeader("referer") != null) {
+		if (request.getHeader("referer") != null) {
 			map.put("retour", request.getHeader("referer"));
+			map.put(ConstantesUtil.VIEW_TITLE, "test");
 		} else {
 			System.err.println("Par l'url !");
 		}
@@ -220,6 +228,52 @@ public class FrontController {
 		}
 	}
 
+	@RequestMapping(value = "/home/patient-{id}", method = RequestMethod.POST)
+	public String updatePatient(HttpServletRequest request, ModelMap map, @PathVariable String id,
+			@RequestParam(name = "nom", required = false) String nom,
+			@RequestParam(name = "prenom", required = false) String prenom,
+			@RequestParam(name = "dob", required = false) String dateOfBirth,
+			@RequestParam(name = "adresse", required = false) String adresse,
+			@RequestParam(name = "ville", required = false) String ville,
+			@RequestParam(name = "cp", required = false) String cp,
+			@RequestParam(name = "email", required = false) String email,
+			@RequestParam(name = "phone", required = false) String telephone,
+			@RequestParam(name = "notes", required = false) String notes) {
+		if (request.getSession().getAttribute(ConstantesUtil.ATTR_USER) == null) {
+			map.put(ConstantesUtil.VIEW_TITLE, "Login");
+			return "redirect:/login";
+		} else {
+			Patient patient = patientService.findById(id);
+			boolean saveOk = true;
+
+			patient.setNom(nom);
+			patient.setPrenom(prenom);
+			patient.setDateOfBirth(ConstantesUtil.stringToDate(dateOfBirth));
+			patient.setAdresse(adresse);
+			patient.setVille(ville);
+			patient.setCodePostal(cp);
+			patient.setEmail(email);
+			patient.setTelephone(telephone);
+			patient.setNote(notes);
+
+			try {
+				patientService.getPatientRepository().save(patient);
+			} catch (Exception e) {
+				System.err.println("Erreur lors de la sauvegarde du profil.");
+				saveOk = false;
+			}
+
+			map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
+			map.put(ConstantesUtil.URI, request.getRequestURI());
+			map.put("patient", patient);
+			map.put("rendezVousPasse", rendezVousService.getAllRendezVousPasse(patient));
+			map.put("rendezVousFutur", rendezVousService.getAllRendezVousFutur(patient));
+			map.put("patientOk", saveOk);
+
+			return "views/patient/view";
+		}
+	}
+
 	@RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}", method = RequestMethod.GET)
 	public String viewRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id,
 			@PathVariable String rdvId) {
@@ -268,6 +322,27 @@ public class FrontController {
 		}
 	}
 
+	@RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}/close", method = RequestMethod.GET)
+	public String closeRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id,
+			@PathVariable String rdvId) {
+		if (request.getSession().getAttribute(ConstantesUtil.ATTR_USER) == null) {
+			map.put(ConstantesUtil.VIEW_TITLE, "Login");
+			return "redirect:/login";
+		} else {
+			Patient patient = patientService.findById(id);
+			RendezVous rdv = rendezVousService.getRepo().findOne(Long.parseLong(rdvId));
+			
+			rdv.setStatus(true);
+			rendezVousService.getRepo().save(rdv);
+
+			map.put(ConstantesUtil.VIEW_TITLE, "Consultation profil");
+			map.put(ConstantesUtil.URI, request.getRequestURI());
+			map.put("patient", patient);
+
+			return "redirect:/home/patient-" + id;
+		}
+	}
+
 	@RequestMapping(value = "/home/patient-{id}/rdv-{rdvId}", method = RequestMethod.POST)
 	public String postRendezVous(HttpServletRequest request, ModelMap map, @PathVariable String id,
 			@PathVariable String rdvId, @RequestParam(value = "dateRdv", required = false) String dateRdv,
@@ -282,6 +357,7 @@ public class FrontController {
 			Patient patient = patientService.findById(id);
 			RendezVous rdv = null;
 			boolean notesOk = false;
+			String idRdv = rdvId;
 
 			if ("new".equals(rdvId)) {
 				rdv = new RendezVous(patient, nomRdv, ConstantesUtil.stringToDate(dateRdv), notesAvant, notesApres,
@@ -290,6 +366,7 @@ public class FrontController {
 					rendezVousService.getRepo().save(rdv);
 					map.put("rendezVous", rdv);
 					map.put("ajoutOk", false);
+					rdvId = String.valueOf(rdv.getId());
 				} catch (Exception e) {
 					System.err.println("Erreur lors de l'ajout du rendez-vous");
 				}
@@ -317,7 +394,7 @@ public class FrontController {
 			map.put("patient", patient);
 			map.put("creneaux", rendezVousService.getCreneauxDispos(rdv.getDateRendezVous()).entrySet());
 
-			return "views/patient/rdv";
+			return "redirect:/home/patient-"+id+"/rdv-"+rdvId;
 		}
 	}
 
@@ -415,7 +492,7 @@ public class FrontController {
 			boolean pwdCheck = true;
 
 			map.put(ConstantesUtil.VIEW_TITLE, "Profil praticien");
-			//map.put(ConstantesUtil.URI, request.getRequestURI());
+			// map.put(ConstantesUtil.URI, request.getRequestURI());
 
 			praticien.setNom(nom);
 			praticien.setPrenom(prenom);
@@ -441,5 +518,33 @@ public class FrontController {
 
 			return "views/praticien/settings";
 		}
+	}
+	
+	@RequestMapping(value = "/home/dashboard", method = RequestMethod.GET)
+	public String indexDashboard(HttpServletRequest request, ModelMap map) {
+		Praticien praticien = (Praticien) request.getSession().getAttribute(ConstantesUtil.ATTR_USER);
+		boolean queryOk = true;
+		String msgError = "";
+		List<Paiement> listePaiements = new ArrayList<>();
+		List<Patient> listePatient = new ArrayList<>();
+		List<BeanData> data = new ArrayList<>();
+		
+		try {
+			msgError = "Erreur lors de la récupération des paiements";
+			listePaiements = paiementService.getRepo().findByWeek();
+			msgError = "Erreur lors de la récupération des statuts des rendez-vous";
+			listePatient = patientService.getPatientRepository().findByPraticien(praticien);
+			msgError = "Erreur lors de la génération de la collection";
+			data = paiementService.trierRevenus(listePaiements);			
+		} catch (Exception e) {
+			System.err.println(msgError);
+			queryOk = false;
+		}
+		
+		map.put("praticien", praticien);
+		map.put("queryOk", queryOk);
+		map.put("dataRevenus", data);
+		
+		return "views/dashboard/index";
 	}
 }

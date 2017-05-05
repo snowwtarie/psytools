@@ -85,7 +85,7 @@
 	                	{{/rendezVous.status}}
 		                {{^rendezVous.status}}
 		                	{{^newRdv}}	                
-		                	<button type="button" class="btn btn-success btn-fill btn-wd">Cloturer rendez-vous</button>	                
+		                	<a href="{{uri}}/close"><button type="button" class="btn btn-success btn-fill btn-wd">Cloturer rendez-vous</button></a>                
 		                	<button type="button" class="btn btn-danger btn-fill btn-wd" id="annulerRdv">Annuler rendez-vous</button>
 		                	{{/newRdv}}
 	                	{{/rendezVous.status}}

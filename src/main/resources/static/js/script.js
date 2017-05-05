@@ -47,6 +47,17 @@ $(document).ready(function() {
     if ($('#ajoutOk').length > 0) {
         $.notify({
             icon: 'ti-info-alt',
+            message: "Enregistrement du <strong>patient</strong> réussi"
+
+        },{
+            type: 'success',
+            timer: 4000
+        });
+    }
+
+    if ($('#ajoutOk').length > 0) {
+        $.notify({
+            icon: 'ti-info-alt',
             message: "Enregistrement du <strong>rendez-vous</strong> réussi"
 
         },{
@@ -57,16 +68,6 @@ $(document).ready(function() {
     
     $('#annulerRdv').on('click', function(event) {
     	var delOk = confirm('Voulez-vous vraiment supprimer ce rendez-vous ?');
-    	
-    	event.preventDefault();
-    	
-    	if (delOk) {
-    		window.location = location.pathname + '/cancel';
-    	}
-    })
-    
-    $('#annulerRdv').on('click', function(event) {
-    	var delOk = confirm('Voulez-vous vraiment supprimer ce patient ?');
     	
     	event.preventDefault();
     	
